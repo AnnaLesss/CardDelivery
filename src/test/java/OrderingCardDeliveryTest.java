@@ -12,7 +12,9 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.*;
 
 public class OrderingCardDeliveryTest {
@@ -42,17 +44,13 @@ public class OrderingCardDeliveryTest {
 
     @Test
     void shouldMakeCardOrder() {
-        $("[data-test-id=city]").setValue("Тула");
-        $("[data-test-id=date]").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.DELETE);
-        $("[data-test-id=date]").setValue(generateDate(5));
-        $("[data-test-id=name]").setValue("Петров Лев");
-        $("[data-test-id=phone]").setValue("+79532223322");
+        $("[data-test-id=city] input").setValue("Тула");
+        $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.DELETE);
+        $("[data-test-id=date] input").setValue(generateDate(3));
+        $("[data-test-id=name] input").setValue("Петров Лев");
+        $("[data-test-id=phone] input").setValue("+79532223322");
         $("[data-test-id=agreement]").click();
-        $$("button").findBy(Condition.exactText("Забронировать")).click();
-//        $$("button").findBy(Condition.exactText("Забронировать")).click().shouldBe(Duration.ofSeconds(15));
+        $$("button").findBy(Condition.exactText("Забронировать")).shouldBe(visible, Duration.ofSeconds(15)).click() ;
         $("[data-test-id=notification]").find(generateDate(3)).shouldBe(visible, Duration.ofSeconds(5));
-
-
     }
-
 }
